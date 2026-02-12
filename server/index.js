@@ -4,7 +4,9 @@ const bodyParser = require('body-parser');
 require('dotenv').config({ path: '../.env' });
 
 const { createDatabase, initTables } = require('./db');
-const ticketsRouter = require('./routes/tickets');
+const eventsRouter = require('./routes/events');
+const seatsRouter = require('./routes/seats');
+const bookingsRouter = require('./routes/bookings');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,7 +19,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/tickets', ticketsRouter);
+app.use('/api/events', eventsRouter);
+app.use('/api/seats', seatsRouter);
+app.use('/api/bookings', bookingsRouter);
 
 // Health check
 app.get('/api/health', (req, res) => {
