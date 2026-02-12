@@ -1,20 +1,17 @@
 {
   "name": "ticketing",
   "version": "1.0.0",
-  "description": "A ticketing system built with Node.js, React, Mantine UI, and MySQL",
-  "main": "server/index.js",
+  "description": "A ticketing system built with Next.js, React, Mantine UI, and MySQL",
   "scripts": {
-    "install:all": "npm install && cd client && npm install",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "cd server && node index.js",
-    "client": "cd client && npm run dev",
-    "build": "cd client && npm run build",
-    "start": "node server/index.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "keywords": [
     "ticketing",
     "helpdesk",
-    "nodejs",
+    "nextjs",
     "react",
     "mantine",
     "mysql"
@@ -22,6 +19,24 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "concurrently": "^8.2.2"
+    "@mantine/core": "^7.17.8",
+    "@mantine/hooks": "^7.17.8",
+    "@mantine/notifications": "^7.17.8",
+    "@tanstack/react-query": "^5.90.20",
+    "mysql2": "^3.11.5",
+    "next": "16.1.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "postcss": "^8.4.49",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1",
+    "typescript": "^5"
   }
 }
