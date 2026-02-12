@@ -1,0 +1,27 @@
+{
+  "name": "ticketing",
+  "version": "1.0.0",
+  "description": "A ticketing system built with Node.js, React, Mantine UI, and MySQL",
+  "main": "server/index.js",
+  "scripts": {
+    "install:all": "npm install && cd client && npm install",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && node index.js",
+    "client": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "start": "node server/index.js"
+  },
+  "keywords": [
+    "ticketing",
+    "helpdesk",
+    "nodejs",
+    "react",
+    "mantine",
+    "mysql"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
