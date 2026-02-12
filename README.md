@@ -1,6 +1,6 @@
 # Ticketing System
 
-A modern event ticketing and seat selection system built with Node.js, React, Mantine UI, TanStack Query, and MySQL.
+A modern event ticketing and seat selection system built with Next.js, React, Mantine UI, TanStack Query, and MySQL.
 
 ## Features
 
@@ -9,45 +9,42 @@ A modern event ticketing and seat selection system built with Node.js, React, Ma
 - Seat booking system
 - Admin panel for event management
 - Responsive design with Mantine UI
-- RESTful API backend with Express.js
+- Next.js API routes (not front-facing endpoints)
 - MySQL database for data persistence
 
 ## Tech Stack
 
-**Frontend:**
+**Frontend & Backend:**
+- Next.js 16 (Full-stack framework)
 - React 19
 - Mantine UI 7
 - TanStack Query (React Query)
-- React Router
-- Vite
+- TypeScript
 
-**Backend:**
-- Node.js with Express.js
-- MySQL database
-- RESTful API architecture
+**Database:**
+- MySQL 8.0+
+- mysql2 driver
 
 ## Project Structure
 
-\`\`\`
+```
 ticketing/
-├── client/                 # React frontend
-│   ├── src/
-│   │   ├── pages/         # Page components
-│   │   ├── api.js         # API client
-│   │   ├── App.jsx        # Main app component
-│   │   └── main.jsx       # Entry point
-│   └── package.json
-├── server/                # Node.js backend
-│   ├── routes/           # API routes
-│   │   ├── events.js     # Event endpoints
-│   │   ├── seats.js      # Seat endpoints
-│   │   └── bookings.js   # Booking endpoints
-│   ├── db.js             # Database connection
-│   ├── index.js          # Server entry point
-│   └── package.json
-├── .env.example          # Environment variables template
-└── package.json          # Root package.json
-\`\`\`
+├── src/
+│   ├── app/
+│   │   ├── api/              # Next.js API routes (internal)
+│   │   │   ├── events/       # Event endpoints
+│   │   │   ├── bookings/     # Booking endpoints
+│   │   │   └── health/       # Health check
+│   │   ├── admin/            # Admin panel page
+│   │   ├── events/           # Event detail pages
+│   │   ├── layout.tsx        # Root layout
+│   │   ├── page.tsx          # Home page
+│   │   └── providers.tsx     # Client-side providers
+│   └── lib/
+│       └── db.ts             # Database connection
+├── .env.example              # Environment variables template
+└── package.json              # Dependencies and scripts
+```
 
 ## Quick Start
 
@@ -60,35 +57,32 @@ ticketing/
 ### Installation
 
 1. **Clone the repository:**
-   \`\`\`bash
+   ```bash
    git clone <repository-url>
    cd ticketing
-   \`\`\`
+   ```
 
 2. **Install dependencies:**
-   \`\`\`bash
+   ```bash
    npm install
-   cd server && npm install
-   cd ../client && npm install
-   cd ..
-   \`\`\`
+   ```
 
 3. **Set up MySQL database:**
    
    Create a MySQL database:
-   \`\`\`sql
+   ```sql
    CREATE DATABASE ticketing;
-   \`\`\`
+   ```
 
 4. **Configure environment variables:**
    
    Copy the example env file:
-   \`\`\`bash
+   ```bash
    cp .env.example .env
-   \`\`\`
+   ```
    
-   Edit \`.env\` with your configuration:
-   \`\`\`env
+   Edit `.env` with your configuration:
+   ```env
    # Database Configuration
    DB_HOST=localhost
    DB_USER=root
@@ -99,73 +93,51 @@ ticketing/
    # Server Configuration
    PORT=3000
    NODE_ENV=development
-   
-   # CORS Configuration
-   CORS_ORIGIN=http://localhost:5173
-   \`\`\`
-   
-   Configure client environment:
-   \`\`\`bash
-   cd client
-   cp .env.example .env
-   \`\`\`
-   
-   Edit \`client/.env\`:
-   \`\`\`env
-   VITE_API_URL=http://localhost:3000/api
-   \`\`\`
+   ```
 
 5. **Start the application:**
    
-   **Option 1: Run both servers concurrently (recommended for development)**
-   \`\`\`bash
+   **Development mode:**
+   ```bash
    npm run dev
-   \`\`\`
+   ```
    
-   **Option 2: Run servers separately**
-   
-   Terminal 1 - Backend:
-   \`\`\`bash
-   npm run server
-   \`\`\`
-   
-   Terminal 2 - Frontend:
-   \`\`\`bash
-   npm run client
-   \`\`\`
+   **Production build:**
+   ```bash
+   npm run build
+   npm start
+   ```
 
 6. **Access the application:**
-   - Frontend: http://localhost:5173
-   - Backend API: http://localhost:3000/api
-   - Admin Panel: http://localhost:5173/admin
+   - Frontend: http://localhost:3000
+   - Admin Panel: http://localhost:3000/admin
+   - API Health Check: http://localhost:3000/api/health
 
-## API Endpoints
+## API Routes
+
+The API routes are **internal** Next.js routes (not front-facing endpoints like in traditional REST APIs). They are used by the Next.js pages internally.
 
 ### Events
 
-- \`GET /api/events\` - List all events
-- \`POST /api/events\` - Create a new event
-- \`GET /api/events/:id\` - Get event details with seats
-- \`PATCH /api/events/:id\` - Update event
-- \`DELETE /api/events/:id\` - Delete event
-- \`PATCH /api/events/:eventId/seats\` - Update seat status
+- `GET /api/events` - List all events
+- `POST /api/events` - Create a new event
+- `GET /api/events/:id` - Get event details with seats
+- `PATCH /api/events/:id` - Update event
+- `DELETE /api/events/:id` - Delete event
+- `PATCH /api/events/:eventId/seats` - Update seat status
 
 ### Bookings
 
-- \`POST /api/bookings\` - Create a booking
-- \`GET /api/bookings/event/:eventId\` - Get bookings for an event
-
-### Seats
-
-- \`GET /api/seats/event/:eventId\` - Get seats for an event
+- `POST /api/bookings` - Create a booking
+- `GET /api/bookings/event/:eventId` - Get bookings for an event
 
 ### Health Check
 
-- \`GET /api/health\` - Server health check
+- `GET /api/health` - Server health check
 
 ## Deployment on PaaS
 
-This application is ready for deployment on Platform as a Service (PaaS) providers.
+This application is ready for deployment on Platform as a Service (PaaS) providers like Virtuozzo Application Platform.
 
 ### Deployment Steps
 
@@ -175,7 +147,7 @@ This application is ready for deployment on Platform as a Service (PaaS) provide
 
 2. **Configure Environment Variables:**
    Set the following environment variables in your PaaS platform:
-   \`\`\`
+   ```
    DB_HOST=<mysql-host>
    DB_USER=<mysql-user>
    DB_PASSWORD=<mysql-password>
@@ -183,22 +155,17 @@ This application is ready for deployment on Platform as a Service (PaaS) provide
    DB_PORT=3306
    PORT=3000
    NODE_ENV=production
-   CORS_ORIGIN=<your-frontend-url>
-   \`\`\`
+   ```
 
 3. **Deploy Application:**
    - Deploy the application via Git or file upload
    - The database tables will be created automatically on first run
+   - Build the application: `npm run build`
 
-4. **Build Frontend:**
-   \`\`\`bash
-   cd client && npm run build
-   \`\`\`
-
-5. **Access Your Application:**
-   - Frontend: \`https://your-domain.com\`
-   - Admin Panel: \`https://your-domain.com/admin\`
-   - API Health Check: \`https://your-domain.com/api/health\`
+4. **Access Your Application:**
+   - Frontend: `https://your-domain.com`
+   - Admin Panel: `https://your-domain.com/admin`
+   - API Health Check: `https://your-domain.com/api/health`
 
 ## License
 

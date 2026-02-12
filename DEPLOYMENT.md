@@ -1,6 +1,6 @@
 # Deployment Guide
 
-This guide covers deploying the Ticketing System on Virtuozzo Application Platform.
+This guide covers deploying the Ticketing System (Next.js application) on Virtuozzo Application Platform.
 
 ## Table of Contents
 
@@ -31,10 +31,9 @@ DB_PORT=3306
 # Server Configuration
 PORT=3000
 NODE_ENV=production
-
-# CORS Configuration
-CORS_ORIGIN=<your-frontend-url>
 ```
+
+**Note**: CORS configuration is not needed as this is a Next.js full-stack application with internal API routes.
 
 ## Deployment on Virtuozzo Application Platform
 
@@ -89,10 +88,9 @@ Virtuozzo Application Platform (also known as Jelastic) is an ideal PaaS for thi
 
 1. Build your application locally:
    ```bash
-   cd client && npm run build
-   cd ..
+   npm run build
    ```
-2. Create a zip archive of your entire project (excluding `node_modules`)
+2. Create a zip archive of your entire project (excluding `node_modules` and `.next`)
 3. In your environment, click on the **Node.js** node
 4. Click **"Deployment Manager"**
 5. Click **"Upload"** and select your zip file
@@ -117,9 +115,6 @@ Virtuozzo Application Platform (also known as Jelastic) is an ideal PaaS for thi
    # Server Configuration
    PORT=3000
    NODE_ENV=production
-   
-   # CORS Configuration
-   CORS_ORIGIN=https://<env-name>.<provider-domain>
    ```
 
    **Note**: Replace the placeholders with your actual values:
@@ -158,8 +153,8 @@ Your application will be available at the following URLs:
 - **Admin Panel**: `https://<env-name>.<provider-domain>/admin`
   - Use this URL to manage events, view bookings, and configure the system
   
-- **API Endpoints**: `https://<env-name>.<provider-domain>/api`
-  - Base URL for all API requests
+- **API Routes** (Internal): `https://<env-name>.<provider-domain>/api`
+  - These are internal Next.js API routes, not front-facing REST endpoints
   
 - **Health Check**: `https://<env-name>.<provider-domain>/api/health`
   - Returns `{"status":"ok","message":"Ticketing API is running"}` when the app is healthy
@@ -239,7 +234,6 @@ Virtuozzo automatically provides **free SSL certificates** for your environment:
 1. **Built-in SSL**: Your application is automatically accessible via HTTPS
 2. **SSL Certificate**: Managed by Virtuozzo, auto-renewed
 3. **Verification**: Ensure all URLs use `https://` protocol
-4. **CORS Configuration**: Make sure `CORS_ORIGIN` uses `https://` URLs
 
 **For Custom Domains:**
 1. Bind your custom domain in the environment settings
@@ -248,18 +242,13 @@ Virtuozzo automatically provides **free SSL certificates** for your environment:
 
 ### Frontend Deployment
 
-You have two options for the frontend:
+This is a **Next.js full-stack application**, which means the frontend and backend are integrated:
 
-**Option 1: Serve from the backend (already configured)**
-- The application is configured to serve the built React frontend from the Node.js server
-- Build the frontend: `cd client && npm run build`
-- The build output is served automatically from the Express server
-- Single environment deployment - simpler to manage
-
-**Option 2: Deploy frontend separately (for advanced users)**
-- Deploy frontend to a separate environment or CDN
-- Update `CORS_ORIGIN` environment variable to match the frontend URL
-- Provides better separation of concerns and independent scaling
+- The application includes both frontend pages and API routes in a single codebase
+- No separate frontend deployment is needed
+- Building the app (`npm run build`) creates an optimized production bundle
+- Next.js automatically serves both the UI and API routes
+- Simpler deployment and better performance than separate frontend/backend
 
 ### Backup Strategy
 
@@ -339,21 +328,21 @@ If the Node.js application fails to start:
 
 ### CORS Errors
 
-If the frontend can't connect to the backend API:
+**Note**: CORS is not relevant for this Next.js application since the API routes are internal (same-origin).
 
-1. **Verify CORS_ORIGIN:**
-   - Must match the frontend URL exactly
-   - Include the protocol: `https://`
-   - No trailing slash: ❌ `https://app.example.com/` → ✅ `https://app.example.com`
-   - Example: `CORS_ORIGIN=https://ticketing-app.jls-sto1.elastx.net`
+If you experience issues with API calls:
 
-2. **Check browser console:**
+1. **Check browser console:**
    - Open browser DevTools (F12)
-   - Look for CORS-related errors
-   - Verify the request URL matches your backend
+   - Look for API-related errors
+   - Verify API routes are being called correctly
+
+2. **Verify Next.js is running:**
+   - Check logs for Next.js startup messages
+   - Ensure the build completed successfully
 
 3. **Restart after changes:**
-   - After updating `CORS_ORIGIN`, restart the Node.js node
+   - After any changes, restart the Node.js node
    - Clear browser cache or use incognito mode to test
 
 ### Port Issues
@@ -465,7 +454,6 @@ Before going to production, ensure:
 - [ ] All environment variables are set properly (not hardcoded in code)
 - [ ] Database credentials are secure and complex
 - [ ] HTTPS is enabled (automatic in Virtuozzo)
-- [ ] CORS is properly configured with specific origin (not `*`)
 - [ ] Database backups are enabled and tested
 - [ ] Application logs are being monitored
 - [ ] Dependencies are up to date (`npm audit` shows no critical vulnerabilities)
