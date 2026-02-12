@@ -501,7 +501,7 @@ Before going to production, ensure:
    - Virtuozzo auto-scales within your defined range
 
 2. **Monitor usage:**
-   - Regular check resource consumption
+   - Regularly check resource consumption
    - Identify and fix resource leaks
    - Remove unused environments
 
