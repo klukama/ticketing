@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/db'
+import { db, ensureDbInitialized } from '@/lib/db'
 
 // PATCH /api/events/:eventId/seats - Update seat status
 export async function PATCH(
@@ -7,6 +7,7 @@ export async function PATCH(
   { params }: { params: Promise<{ eventId: string }> }
 ) {
   try {
+    await ensureDbInitialized()
     const { eventId } = await params
     const body = await request.json()
     const { seatIds, status, bookedBy, bookingId } = body

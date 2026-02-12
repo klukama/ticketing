@@ -14,15 +14,20 @@ const pool = mysql.createPool({
 export const db = pool.promise()
 
 let initialized = false
+let initializing = false
 
 // Initialize database tables on first request
 export async function ensureDbInitialized() {
-  if (initialized || process.env.NODE_ENV === 'production') {
+  if (initialized || initializing) {
+    // Wait for initialization to complete if it's in progress
+    while (initializing) {
+      await new Promise(resolve => setTimeout(resolve, 100))
+    }
     return
   }
 
   try {
-    initialized = true
+    initializing = true
     
     // Create database if it doesn't exist
     const connection = mysql.createConnection({
@@ -112,7 +117,10 @@ export async function ensureDbInitialized() {
     await db.query(createBookingsTable)
     
     console.log('Database tables initialized')
+    initialized = true
   } catch (error) {
     console.error('Error initializing database tables:', error)
+  } finally {
+    initializing = false
   }
 }

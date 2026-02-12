@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/db'
+import { db, ensureDbInitialized } from '@/lib/db'
 import { randomUUID } from 'crypto'
 
 // POST /api/bookings - Create a booking
 export async function POST(request: Request) {
   try {
+    await ensureDbInitialized()
     const body = await request.json()
     const {
       eventId,
@@ -65,30 +66,5 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Error creating booking:', error)
     return NextResponse.json({ error: 'Failed to create booking' }, { status: 500 })
-  }
-}
-
-// GET /api/bookings/event/:eventId - Get bookings for an event
-export async function GET(request: Request) {
-  try {
-    const url = new URL(request.url)
-    const pathParts = url.pathname.split('/')
-    const eventIndex = pathParts.indexOf('event')
-    
-    if (eventIndex === -1 || eventIndex === pathParts.length - 1) {
-      return NextResponse.json({ error: 'Event ID is required' }, { status: 400 })
-    }
-    
-    const eventId = pathParts[eventIndex + 1]
-    
-    const [bookings] = await db.query(
-      'SELECT * FROM bookings WHERE event_id = ? ORDER BY created_at DESC',
-      [eventId]
-    )
-
-    return NextResponse.json(bookings)
-  } catch (error) {
-    console.error('Error fetching bookings:', error)
-    return NextResponse.json({ error: 'Failed to fetch bookings' }, { status: 500 })
   }
 }

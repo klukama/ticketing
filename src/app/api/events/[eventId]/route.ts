@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/db'
+import { db, ensureDbInitialized } from '@/lib/db'
 
 // GET /api/events/:id - Get single event with seats
 export async function GET(
@@ -7,6 +7,7 @@ export async function GET(
   { params }: { params: Promise<{ eventId: string }> }
 ) {
   try {
+    await ensureDbInitialized()
     const { eventId } = await params
     const [events] = await db.query('SELECT * FROM events WHERE id = ?', [eventId])
     const eventData = events as any[]
@@ -36,6 +37,7 @@ export async function PATCH(
   { params }: { params: Promise<{ eventId: string }> }
 ) {
   try {
+    await ensureDbInitialized()
     const { eventId } = await params
     const body = await request.json()
     const {
@@ -135,6 +137,7 @@ export async function DELETE(
   { params }: { params: Promise<{ eventId: string }> }
 ) {
   try {
+    await ensureDbInitialized()
     const { eventId } = await params
     const [result] = await db.query('DELETE FROM events WHERE id = ?', [eventId]) as any
     
