@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/db'
+import { db, ensureDbInitialized } from '@/lib/db'
 import { randomUUID } from 'crypto'
 
 // Helper function to generate seats for an event
@@ -67,6 +67,7 @@ function generateSeatsForEvent(eventId: string, config: {
 // GET /api/events - List all events
 export async function GET() {
   try {
+    await ensureDbInitialized()
     const [rows] = await db.query('SELECT * FROM events ORDER BY date ASC')
     const events = rows as any[]
     
@@ -97,6 +98,7 @@ export async function GET() {
 // POST /api/events - Create event
 export async function POST(request: Request) {
   try {
+    await ensureDbInitialized()
     const body = await request.json()
     const {
       title,

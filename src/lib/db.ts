@@ -13,9 +13,17 @@ const pool = mysql.createPool({
 
 export const db = pool.promise()
 
-// Initialize database tables on first import
-const initTables = async () => {
+let initialized = false
+
+// Initialize database tables on first request
+export async function ensureDbInitialized() {
+  if (initialized || process.env.NODE_ENV === 'production') {
+    return
+  }
+
   try {
+    initialized = true
+    
     // Create database if it doesn't exist
     const connection = mysql.createConnection({
       host: process.env.DB_HOST || 'localhost',
@@ -108,6 +116,3 @@ const initTables = async () => {
     console.error('Error initializing database tables:', error)
   }
 }
-
-// Call init on import (only runs once due to module caching)
-initTables()
