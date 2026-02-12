@@ -30,9 +30,10 @@ app.get('/api/health', (req, res) => {
 
 // Initialize database
 createDatabase();
+// Wait for database creation before initializing tables
 setTimeout(() => {
   initTables();
-}, 1000);
+}, 2000);
 
 // Start server
 app.listen(PORT, () => {

@@ -21,8 +21,16 @@ const createDatabase = () => {
     port: process.env.DB_PORT || 3306
   });
 
+  const dbName = process.env.DB_NAME || 'ticketing';
+  // Validate database name to prevent SQL injection
+  if (!/^[a-zA-Z0-9_]+$/.test(dbName)) {
+    console.error('Invalid database name format');
+    connection.end();
+    return;
+  }
+
   connection.query(
-    `CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME || 'ticketing'}`,
+    `CREATE DATABASE IF NOT EXISTS \`${dbName}\``,
     (err) => {
       if (err) {
         console.error('Error creating database:', err);

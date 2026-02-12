@@ -12,7 +12,7 @@ export default function HomePage() {
   return (
     <Container size="lg" py="xl">
       <Group justify="space-between" mb="lg">
-        <Title order={1}>What's On</Title>
+        <Title order={1}>What&apos;s On</Title>
         <Link to="/admin">
           <Button variant="subtle" color="gray">Admin Panel</Button>
         </Link>

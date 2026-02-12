@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import {
   Container, Title, Text, Button, Group, Stack, Paper,
   Grid, Badge, Modal, TextInput, Loader
@@ -10,7 +10,6 @@ import { api } from '../api';
 
 export default function EventDetailPage() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [bookingModalOpen, setBookingModalOpen] = useState(false);

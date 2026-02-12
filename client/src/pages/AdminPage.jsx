@@ -152,7 +152,7 @@ export default function AdminPage() {
   };
 
   const handleDelete = (id, title) => {
-    if (window.confirm(`Are you sure you want to delete "${title}"?`)) {
+    if (window.confirm(`Are you sure you want to delete &quot;${title}&quot;?`)) {
       deleteEventMutation.mutate(id);
     }
   };
@@ -243,7 +243,7 @@ export default function AdminPage() {
 
         {!isLoading && events?.length === 0 && (
           <Text c="dimmed" ta="center" py="xl">
-            No events created yet. Click "Create New Event" to get started.
+            No events created yet. Click &quot;Create New Event&quot; to get started.
           </Text>
         )}
       </Stack>

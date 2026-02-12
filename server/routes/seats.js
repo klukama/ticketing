@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { pool } = require('../db');
-const { v4: uuidv4 } = require('uuid');
 
 // Get seats for an event
 router.get('/event/:eventId', async (req, res) => {
